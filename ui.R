@@ -14,7 +14,7 @@ shinyUI(fluidPage(
   sidebarPanel(
     # Upload data:
     fileInput("file", "Upload input data (csv file with header))"),  
-    
+    uiOutput("colList"),
     htmlOutput("fselect"),
     textInput('fname',label = "Enter Factor Name (seperated by comma)"),
     sliderInput("cutoff", "Cut-off for factor loadings(for Plotting only)", min = 0,  max = 1, value = 0.25),
@@ -64,24 +64,24 @@ img(src = "example1.png") #, height = 280, width = 400
                           (verbatimTextOutput("mat")),
                          
                          (h4(p("Uniqueness table - "))),
-                         (tableOutput("uni")),
+                         (dataTableOutput("uni")),
 #                          (textOutput("text4")),
                          plotOutput("plot1",height = 600, width = 850)),
-                tabPanel("Loadings",tableOutput("loadings")),
+                tabPanel("Loadings",dataTableOutput("loadings")),
                 
 #                tabPanel("Scores",tableOutput("scores")),   # origi code
                 # my edits 16-9-2017 below:
                 tabPanel("Scores", 	# tab name
 	                      br(),
                         downloadButton('downloadDataX', 
-		                        'Download Segmentation file (Works only in browser)'), 
+		                        'Download Factor Scores File (Works only in browser)'), 
 	                      br(),br(),
-	              tableOutput("scores")),
+	                      dataTableOutput("scores")),
                 
                 tabPanel("Factor vs Variables",plotOutput("plot20",height = 600, width = 850)),
                 tabPanel("Factor vs Variables 2",plotOutput("plot2",height = 600, width = 850)),
                 tabPanel("Factor vs Users",plotOutput("plot3",height = 600, width = 850)),
-                tabPanel("Data",tableOutput("table")) 
+                tabPanel("Data",dataTableOutput("table")) 
     )
   ) 
 ) 
