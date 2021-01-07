@@ -43,35 +43,35 @@ output$colList <- renderUI({
 #   round(cor(Dataset()),2) 
 #                                       })
 output$corplot = renderPlot({
-  
-  my_data = filtered_dataset()
-  cor.mat <- round(cor(my_data),2)
-  corrplot(cor.mat, 
-           type = "upper",    # upper triangular form
-           order = "hclust",  # ordered by hclust groups
-           tl.col = "black",  # text label color
-           tl.srt = 45)  
-
-})
+  if (is.null(input$file)) { return(NULL) }
+    else{
+      my_data = filtered_dataset()
+      cor.mat <- round(cor(my_data),2)
+      corrplot(cor.mat, 
+               type = "upper",    # upper triangular form
+               order = "hclust",  # ordered by hclust groups
+               tl.col = "black",  # text label color
+               tl.srt = 45)  
+      
+    }
+  })
 
 
 
 output$table <- renderDataTable({ Dataset() },options = list(pageLength=25))
   
 nS = reactive ({    
-  
-  if (is.null(input$file)) { return(NULL) }
-                    else{
-ev = eigen(cor(filtered_dataset(), use = 'pairwise.complete.obs'))  # get eigenvalues
-ap = parallel(subject=nrow((filtered_dataset())),var=ncol((filtered_dataset())),rep=100,cent=.05);
-nS = nScree(ev$values, aparallel= ap$eigen$qevpea);
+    if (is.null(input$file)) { return(NULL) }
+    else{
+      ev = eigen(cor(filtered_dataset(), use = 'pairwise.complete.obs'))  # get eigenvalues
+      ap = parallel(subject=nrow((filtered_dataset())),var=ncol((filtered_dataset())),rep=100,cent=.05)
+      nS = nScree(ev$values, aparallel= ap$eigen$qevpea)
 }
 })
 
 output$fselect <- renderUI({ 
   if (is.null(input$file)) { return(NULL) }
   else{
-    
   numericInput("fselect", "Number of Factors:", unlist((nS())[1])[3])
   }
   })
@@ -283,7 +283,8 @@ output$loadings <- renderDataTable({
   if (is.null(input$file)) { return(NULL) } else{
   # rownames((fit())$loadings) = colnames(Dataset())  # edit 2
   b2 <- unclass((fit())$loadings); rownames(b2) <- NULL;  
-  b1 <- data.frame(colnames(filtered_dataset()), b2);# [2:ncol(Dataset())];rownames(b1) <- colnames(Dataset())  # edit 2  
+  b1 <- data.frame(colnames(filtered_dataset()), round(b2,2));
+  names(b1)[1] <- "Variable"# [2:ncol(Dataset())];rownames(b1) <- colnames(Dataset())  # edit 2  
   #-------#
   if(is.null(fname())){return(b1)}
   else{
@@ -326,7 +327,7 @@ output$uni <- renderDataTable({
   else{ 
     # n = ceiling(length(uni())/3)
     # matrix(uni(), ncol = 1)
-    data.frame(Variable = rownames(as.matrix(fit()$uniqueness)), Uniqueness = fit()$uniqueness)
+    data.frame(Variable = rownames(as.matrix(fit()$uniqueness)), Uniqueness = round(fit()$uniqueness,2))
     }
 },options = list(pageLength=10))
 
@@ -335,9 +336,9 @@ output$scores <- renderDataTable({
   if (is.null(input$file)) { return(NULL) } else{
       # rownames((fit())$scores) = rownames(Dataset()) # edit 3 i made.
       # b0 <- (fit())$scores;   rownames(b0) <- rownames(Dataset()); 
-    
-      b0 <- data.frame(rownames(filtered_dataset()), (fit())$scores) # else ends    
-      
+      b2 <- unclass((fit())$scores); rownames(b2) <- NULL; 
+      b0 <- data.frame(rownames(filtered_dataset()), round(b2,2)) # else ends    
+      names(b0)[1] <- "Variable"
   if(is.null(fname())){return(b0)}
   else{
     names(b0)[c(-1)]<-fname()
