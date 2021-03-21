@@ -4,9 +4,11 @@ if (!require("qgraph")) {install.packages("qgraph")}
 if (!require("corrplot")) {install.packages("corrplot")}
 if (!require("dplyr")) {install.packages("dplyr")}
 if (!require("DT")) {install.packages("DT")}
+if (!require("magrittr")) {install.packages("magrittr")}
 
 
-    
+
+library("magrittr")
 library("shiny")
 library("nFactors")
 library("qgraph")

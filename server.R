@@ -6,6 +6,8 @@ library("shiny")
 library("nFactors")
 library("qgraph")
 library("corrplot")
+library("magrittr")
+
 
 shinyServer(function(input, output) {
 

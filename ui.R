@@ -7,13 +7,16 @@ library("shiny")
 
 shinyUI(fluidPage(
   tags$head(includeScript("google_analytics.js")),
+  title = "Factor analysis",
+  # titlePanel("Regression Tree"),
+  titlePanel(title=div(img(src="logo.png",align='right'),"Factor analysis")),
   
   # Header:
-  titlePanel("Factor analysis"),
+  #titlePanel("Factor analysis"),
   # Input in sidepanel:
   sidebarPanel(
     # Upload data:
-    fileInput("file", "Upload input data (csv file with header))"),  
+    fileInput("file", "Upload input data (csv file with header)"),  
     uiOutput("colList"),
     htmlOutput("fselect"),
     textInput('fname',label = "Enter Factor Name (seperated by comma)"),
