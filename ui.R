@@ -13,6 +13,7 @@ shinyUI(fluidPage(
   
   # Header:
   #titlePanel("Factor analysis"),
+
   # Input in sidepanel:
   sidebarPanel(
     # Upload data:
